@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SignUp</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .form-container {
+            width: 300px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #472dbb;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .submit-btn:hover {
+            background-color: #4565a0;
+        }
+    </style>
+</head>
+<body>
+
+    
+  <div class="form-container">
+    <h2>SignUp</h2>
+    <form action="/signup" method="post">
+      <div class="form-group">
+        <label for="name">username:</label>
+        <input type="text" id="name" name="username" placeholder="enter your username" required autocomplete="off">
+      </div>
+      <div class="form-group">
+        <label for="password">password:</label>
+        <input type="password" id="password" name="password" placeholder="password" required>
+      </div>
+      <button type="submit" class="submit-btn">SignUp</button>
+    </form>
+    <p>Already have an account? <a class="link" href="/login">Login</a></p> 
+  </div>
+
+    
+</body>
+</html>

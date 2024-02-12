@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weather App</title>
+</head>
+<body>
+  <h1>Weather App</h1>
+  <form action="/search" method="post">
+    <label for="city">Enter City:</label>
+    <input type="text" id="city" name="city" required>
+    <button type="submit">Get Weather</button>
+  </form>
+  <% if(existingHtml) {%>
+  <div style="background-color: #f7f7f7; padding: 20px; border-radius: 10px; margin-top: 20px;">
+    <h2 style="color: #333;">Weather in <%=existingHtml.city%></h2>
+    <p style="color: #666; font-size: 18px;">Temperature: <%=existingHtml.temperature%> &deg;C</p>
+    <p style="color: #666; font-size: 18px;">Feels Like: <%=existingHtml.feelsLike%> &deg;C</p>
+    <p>Weather Icon: <img src="https://openweathermap.org/img/wn/<%=existingHtml.weatherIcon%>@2x.png" alt="Weather Icon"></p>
+</div>
+<%}%>
+</body>
+</html>

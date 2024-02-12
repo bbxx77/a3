@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        .action-links {
+            margin-top: 30px;
+        }
+        .action-links a {
+            display: block;
+            margin-bottom: 10px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .action-links a:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome! Now you can use the website.</h1>
+        <div class="action-links">
+            <form method="get" action="/api/weather">
+                <button>Do you want to know the current weather? Click here</button>
+            </form>
+            <form method="get" action="/api/urban">
+                <button>Do you want to know the meaning of the word? Click here</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
