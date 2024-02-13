@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .navbar {
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar span {
+            margin-right: 10px;
+        }
+
+        .navbar-links {
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-link {
+            margin-right: 10px;
+            color: white;
+            text-decoration: none;
+            padding: 8px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .navbar-link:hover {
+            background-color: #555;
+        }
+
+        h1 {
+            color: #333;
+            margin-top: 20px;
+        }
+
+        form {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 16px;
+            color: #333;
+        }
+
+        input {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        button {
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .weather-container {
+            background-color: #f7f7f7;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .weather-container h2 {
+            color: #333;
+        }
+
+        .weather-info {
+            color: #666;
+            font-size: 18px;
+        }
+
+        .weather-icon {
+            margin-top: 10px;
+        }
+        .logout-link {
+            background-color: #dc3545;
+        }
+
+        .home-link {
+            background-color: #28a745;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <span>Welcome User!</span>
+        <div class="navbar-links">
+            <a href="/home" class="navbar-link home-link">Home</a>
+            <a href="/login" class="navbar-link logout-link">Logout</a>
+        </div>
+    </div>
+
+    <h1>Weather App</h1>
+    <form action="/search" method="post">
+        <label for="city">Enter City:</label>
+        <input type="text" id="city" name="city" required>
+        <button type="submit">Get Weather</button>
+    </form>
+
+    <% if(existingHtml) {%>
+        <div class="weather-container">
+            <h2>Weather in <%=existingHtml.city%></h2>
+            <p class="weather-info">Temperature: <%=existingHtml.temperature%> &deg;C</p>
+            <p class="weather-info">Feels Like: <%=existingHtml.feelsLike%> &deg;C</p>
+            <p class="weather-info">Weather Icon: <img class="weather-icon" src="https://openweathermap.org/img/wn/<%=existingHtml.weatherIcon%>@2x.png" alt="Weather Icon"></p>
+        </div>
+    <%}%>
+</body>
+</html>

@@ -28,8 +28,9 @@
     </style>
 </head>
 <body>
-    <h1>Meaning of the Word</h1>
+    <<h1>Meaning of the Word</h1>
     <ul>
+        <% console.log("Meanings:", meanings); %>
         <% meanings.forEach(meaning => { %>
             <li>
                 <strong>Definition:</strong> <%= meaning.definition %><br>
@@ -37,6 +38,6 @@
                 <strong>Author:</strong> <%= meaning.author %><br>
             </li>
         <% }); %>
-    </ul>
+    </ul>    
 </body>
 </html>
