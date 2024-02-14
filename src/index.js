@@ -113,6 +113,7 @@ app.post("/search", async (req, res) => {
         res.status(500).send("Error fetching weather data");
     }
 });
+
 const fetchMeanings = async (word) => {
     try {
         const response = await axios.get(`https://api.urbandictionary.com/v0/define?term=${word}`);
@@ -138,6 +139,13 @@ app.post("/api/search-word", async (req, res) => {
 
     try {
         const meanings = await fetchMeanings(word);
+        const userName = req.session.userName;
+        await collection.UserActionModel.create({
+            username: userName,
+            action: `Search word on Dictionary: ${word}`,
+            date: new Date(),
+        });
+
         res.render("../api/urban", { meanings });
     } catch (error) {
         console.error(error);
