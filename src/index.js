@@ -16,6 +16,7 @@ app.use(express.static("public"));
 app.use(express.urlencoded({ extended: false }));
 app.set("view engine", "ejs");
 app.use('/api', express.static(path.join(__dirname, 'api')));
+app.use(express.static(path.join(__dirname, '../public')));
 
 let existingHtml = "";
 
@@ -112,16 +113,37 @@ app.post("/search", async (req, res) => {
         res.status(500).send("Error fetching weather data");
     }
 });
+const fetchMeanings = async (word) => {
+    try {
+        const response = await axios.get(`https://api.urbandictionary.com/v0/define?term=${word}`);
+        return response.data.list;
+    } catch (error) {
+        console.error("Error fetching Urban Dictionary data:", error);
+        throw error;
+    }
+};
+
 app.get("/api/urban-dictionary", async (req, res) => {
     try {
         const meanings = await fetchMeanings();
+        res.render("../api/urban", { meanings });
+    } catch (error) {
+        console.error("Error fetching Urban Dictionary data:", error);
+        res.render("../api/urban", { meanings: [] });
+    }
+});
+
+app.post("/api/search-word", async (req, res) => {
+    const word = req.body.word;
+
+    try {
+        const meanings = await fetchMeanings(word);
         res.render("../api/urban", { meanings });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: "Error fetching Urban Dictionary data" });
     }
 });
-
 app.listen(port, () => {
     console.log(`Server listening on port ${port}`);
 });

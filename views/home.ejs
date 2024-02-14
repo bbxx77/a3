@@ -26,6 +26,26 @@
             align-items: center;
         }
 
+        .navbar-links {
+            display: flex;
+            align-items: center;
+        }
+        .navbar span {
+         margin-left: 50px; /* Adjust the margin as needed */
+        }
+        .navbar-link {
+            margin-right: 10px;
+            color: white;
+            text-decoration: none;
+            padding: 8px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .navbar-link:hover {
+            background-color: #555;
+        }
+
         .container {
             text-align: center;
             background-color: #fff;
@@ -53,31 +73,26 @@
         button {
             padding: 10px;
             font-size: 16px;
-            background-color: #007bff;
-            border: none;
-            border-radius: 5px;
-            color: #fff;
             cursor: pointer;
         }
 
-        button:hover {
-            background-color: #0056b3;
+        .logout-link, .home-link {
+            background-color: transparent;
+            color: white;
+            border: 1px solid transparent;
         }
 
-        .logout-button {
-            background-color: #dc3545;
-            margin-left: 10px;
-        }
-
-        .logout-button:hover {
-            background-color: #c82333;
+        .logout-link:hover, .home-link:hover {
+            background-color: #555;
         }
     </style>
 </head>
 <body>
     <div class="navbar">
-        <span style="margin-right: 10px;">Welcome User!</span>
-        <button class="logout-button" onclick="location.href='/login'">Logout</button>
+        <span>Welcome User!</span>
+        <div class="navbar-links">
+            <a href="/login" class="navbar-link logout-link">Logout</a>
+        </div>
     </div>
 
     <div class="container">

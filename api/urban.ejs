@@ -7,37 +7,133 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 20px;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+
+        .navbar {
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar span {
+            margin-right: 10px;
+        }
+
+        .navbar-links {
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-link {
+            margin-right: 10px;
+            color: white;
+            text-decoration: none;
+            padding: 8px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .navbar-link:hover {
+            background-color: #555;
         }
 
         h1 {
             color: #333;
+            margin-top: 20px;
         }
 
-        ul {
-            list-style-type: none;
-            padding: 0;
+        .search-container {
+            margin-top: 20px;
+            text-align: center;
         }
 
-        li {
-            margin-bottom: 10px;
-            border: 1px solid #ddd;
+        .search-input {
             padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
             border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .search-button {
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .meanings-container {
+            margin-top: 20px;
+            text-align: left;
+            max-width: 600px;
+        }
+
+        .meaning-item {
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #fff;
+        }
+
+        .definition {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .example {
+            font-style: italic;
+            color: #666;
+        }
+
+        .author {
+            color: #888;
         }
     </style>
 </head>
 <body>
-    <<h1>Meaning of the Word</h1>
-    <ul>
-        <% console.log("Meanings:", meanings); %>
-        <% meanings.forEach(meaning => { %>
-            <li>
-                <strong>Definition:</strong> <%= meaning.definition %><br>
-                <strong>Example:</strong> <%= meaning.example %><br>
-                <strong>Author:</strong> <%= meaning.author %><br>
-            </li>
-        <% }); %>
-    </ul>    
+    <div class="navbar">
+        <span></span>
+        <div class="navbar-links">
+            <a href="/home" class="navbar-link home-link">Home</a>
+            <a href="/login" class="navbar-link logout-link">Logout</a>
+        </div>
+    </div>
+
+    <h1>Meaning of the Word</h1>
+
+    <div class="search-container">
+        <form action="/api/search-word" method="post">
+            <label for="word">Enter Word:</label>
+            <input type="text" id="word" name="word" class="search-input" required>
+            <button class="search-button" type="submit">Search Meaning</button>
+        </form>
+    </div>
+
+    <div class="meanings-container">
+        <% if (meanings && meanings.length > 0) { %>
+            <h2>Meanings:</h2>
+            <% meanings.forEach(meaning => { %>
+                <div class="meaning-item">
+                    <div class="definition"><strong>Definition:</strong> <%= meaning.definition %></div>
+                    <div class="example"><strong>Example:</strong> <%= meaning.example %></div>
+                    <div class="author"><strong>Author:</strong> <%= meaning.author %></div>
+                </div>
+            <% }); %>
+        <% } else { %>
+            <p>No meanings found for the word.</p>
+        <% } %>
+    </div>
 </body>
 </html>

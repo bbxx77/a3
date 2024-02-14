@@ -98,18 +98,20 @@
         .weather-icon {
             margin-top: 10px;
         }
-        .logout-link {
-            background-color: #dc3545;
+        .logout-link, .home-link {
+            background-color: transparent;
+            color: white;
+            border: 1px solid transparent;
         }
 
-        .home-link {
-            background-color: #28a745;
+        .logout-link:hover, .home-link:hover {
+            background-color: #555;
         }
     </style>
 </head>
 <body>
     <div class="navbar">
-        <span>Welcome User!</span>
+        <span></span>
         <div class="navbar-links">
             <a href="/home" class="navbar-link home-link">Home</a>
             <a href="/login" class="navbar-link logout-link">Logout</a>
@@ -126,8 +128,8 @@
     <% if(existingHtml) {%>
         <div class="weather-container">
             <h2>Weather in <%=existingHtml.city%></h2>
-            <p class="weather-info">Temperature: <%=existingHtml.temperature%> &deg;C</p>
-            <p class="weather-info">Feels Like: <%=existingHtml.feelsLike%> &deg;C</p>
+            <p class="weather-info">Temperature: <%= (existingHtml.temperature - 273.15).toFixed(2) %> &deg;C</p>
+            <p class="weather-info">Feels Like: <%= (existingHtml.temperature - 273.15).toFixed(2) %> &deg;C</p>
             <p class="weather-info">Weather Icon: <img class="weather-icon" src="https://openweathermap.org/img/wn/<%=existingHtml.weatherIcon%>@2x.png" alt="Weather Icon"></p>
         </div>
     <%}%>
