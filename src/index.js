@@ -188,6 +188,20 @@ app.post("/api/movies", async (req, res) => {
 });
 
 
+app.get("/history", async (req, res) => {
+    try {
+        // Получите историю пользователя из базы данных
+        const userName = req.session.userName;
+        const userHistory = await collection.UserActionModel.find({ username: userName }).sort({ date: -1 });
+
+        // Отобразите страницу истории с данными
+        res.render("history", { userHistory });
+    } catch (error) {
+        console.error('Error fetching user history:', error);
+        res.status(500).send('An error occurred while fetching user history.');
+    }
+});
+
 app.listen(port, () => {
     console.log(`Server listening on port ${port}`);
 });
