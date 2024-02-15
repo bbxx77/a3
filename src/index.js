@@ -190,11 +190,8 @@ app.post("/api/movies", async (req, res) => {
 
 app.get("/history", async (req, res) => {
     try {
-        // Получите историю пользователя из базы данных
         const userName = req.session.userName;
         const userHistory = await collection.UserActionModel.find({ username: userName }).sort({ date: -1 });
-
-        // Отобразите страницу истории с данными
         res.render("history", { userHistory });
     } catch (error) {
         console.error('Error fetching user history:', error);
@@ -202,6 +199,30 @@ app.get("/history", async (req, res) => {
     }
 });
 
+
+app.get('/download-history', async (req, res) => {
+    try {
+        const histories = await collection.UserActionModel.find(); 
+        const pdfDoc = new pdfkit();
+        const stream = pdfDoc.pipe(blobStream());
+
+        pdfDoc.text('Search History', { align: 'center', fontSize: 20, margin: 10 });
+
+        histories.forEach(history => {
+            pdfDoc.text(`Date: ${history.date}, Action: ${history.action}`, { margin: 5 });
+        });
+
+        pdfDoc.end();
+        res.setHeader('Content-disposition', 'attachment; filename=search_history.pdf');
+        res.setHeader('Content-type', 'application/pdf');
+
+        stream.pipe(res);
+    } catch (error) {
+        console.error('Error fetching search history:', error);
+        res.status(500).send('An error occurred while fetching search history.');
+    }
+});
+
 app.listen(port, () => {
-    console.log(`Server listening on port ${port}`);
+    console.log(`Server listening at http://localhost:${port}`);
 });
