@@ -29,7 +29,7 @@ app.get("/api/weather", (req, res) => {
 });
 
 app.get("/api/urban-dictionary", (req, res) => {
-    res.render("../api/urban", {meanings: null});
+    res.render("../api/urban", { meanings: null });
 });
 
 app.get("/signup", (req, res) => {
@@ -42,6 +42,10 @@ app.get("/login", (req, res) => {
 
 app.get("/home", (req, res) => {
     res.render("../views/home");
+});
+
+app.get("/api/movies", (req, res) => {
+    res.render("../api/movies", { movies: null });
 });
 
 app.post("/signup", async (req, res) => {
@@ -57,7 +61,7 @@ app.post("/signup", async (req, res) => {
             res.send('User already exists. Please choose a different username.');
         } else {
             await collection.UserModel.create(data);
-            res.send('User registered successfully.Now please Login and you can use the website');
+            res.send('User registered successfully. Now please Login and you can use the website');
         }
     } catch (error) {
         console.error('Error during signup:', error);
@@ -152,6 +156,38 @@ app.post("/api/search-word", async (req, res) => {
         res.status(500).json({ error: "Error fetching Urban Dictionary data" });
     }
 });
+
+app.post("/api/movies", async (req, res) => {
+    const movieTitle = req.body.movieTitle;
+
+    try {
+        const response = await axios.get(
+            `https://moviesdatabase.p.rapidapi.com/titles/search/title/${movieTitle}`,
+            {
+                headers: {
+                    'X-RapidAPI-Key': 'b7a46591c7msh9fd0404fd28ff29p1a4c3ejsn4be6a293c2f2',
+                    'X-RapidAPI-Host': 'moviesdatabase.p.rapidapi.com'
+                }
+            }
+        );
+
+        const userName = req.session.userName; 
+
+        await collection.UserActionModel.create({
+            username: userName,
+            action: `Search word on Movies: ${movieTitle}`,
+            date: new Date(),
+        });
+
+        const movieData = response.data;
+        res.render("../api/movies", { movies: movieData });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Error fetching movie data" });
+    }
+});
+
+
 app.listen(port, () => {
     console.log(`Server listening on port ${port}`);
 });
