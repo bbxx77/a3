@@ -6,6 +6,8 @@ const bodyParser = require("body-parser");
 const session = require("express-session");
 const app = express();
 const port = 3000;
+const bcrypt = require('bcrypt');
+
 
 app.use(session({ secret: "your-secret-key", resave: true, saveUninitialized: true }));
 app.use(express.static(__dirname + '../public'));
@@ -47,7 +49,6 @@ app.get("/home", (req, res) => {
 app.get("/api/movies", (req, res) => {
     res.render("../api/movies", { movies: null });
 });
-
 app.post("/signup", async (req, res) => {
     const data = {
         name: req.body.username,
@@ -60,6 +61,9 @@ app.post("/signup", async (req, res) => {
         if (existingUser) {
             res.send('User already exists. Please choose a different username.');
         } else {
+            const hashedPassword = await bcrypt.hash(data.password, 10);
+            data.password = hashedPassword;
+
             await collection.UserModel.create(data);
             res.send('User registered successfully. Now please Login and you can use the website');
         }
@@ -71,21 +75,32 @@ app.post("/signup", async (req, res) => {
 
 app.post("/login", async (req, res) => {
     try {
-        const check = await collection.UserModel.findOne({ name: req.body.username });
+        const user = await collection.UserModel.findOne({ name: req.body.username });
 
-        if (!check) {
+        if (!user) {
             res.send("User name not found");
-        } else if (check.password !== req.body.password) {
-            res.send("Incorrect password");
         } else {
-            req.session.userName = check.name;
-            res.render("home");
+            const isPasswordValid = await bcrypt.compare(req.body.password, user.password);
+
+            if (isPasswordValid) {
+                req.session.userName = user.name;
+
+                // Check if the user is the admin (replace 'balzhan' and '2003' with your admin username and password)
+                if (req.body.username === 'balzhan' && req.body.password === '2003') {
+                    res.redirect('/admin-panel');
+                } else {
+                    res.render("home");
+                }
+            } else {
+                res.send("Incorrect password");
+            }
         }
     } catch (error) {
         console.error('Error during login:', error);
         res.status(500).send('An error occurred during login.');
     }
 });
+
 
 app.post("/search", async (req, res) => {
     const city = req.body.city;
@@ -222,6 +237,75 @@ app.get('/download-history', async (req, res) => {
         res.status(500).send('An error occurred while fetching search history.');
     }
 });
+
+app.get('/admin-panel', async (req, res) => {
+    try {
+        // Retrieve all users from the database
+        const users = await collection.UserModel.find();
+
+        res.render('admin-panel', { users });
+    } catch (error) {
+        console.error('Error fetching users for admin panel:', error);
+        res.status(500).send('An error occurred while fetching users for admin panel.');
+    }
+});
+
+// Route to handle user deletion in admin panel
+app.post('/admin-panel/delete-user/:userId', async (req, res) => {
+    const userId = req.params.userId;
+
+    try {
+        // Delete user by ID
+        await collection.UserModel.findByIdAndDelete(userId);
+
+        // Redirect back to the admin panel after deletion
+        res.redirect('/admin-panel');
+    } catch (error) {
+        console.error('Error deleting user:', error);
+        res.status(500).send('An error occurred while deleting the user.');
+    }
+});
+
+
+app.get('/admin-panel/edit-user/:userId', async (req, res) => {
+    const userId = req.params.userId;
+
+    try {
+        const user = await collection.UserModel.findById(userId);
+        res.render('admin-edit-user', { user });
+    } catch (error) {
+        console.error('Error fetching user details for edit:', error);
+        res.status(500).send('An error occurred while fetching user details for edit.');
+    }
+});
+
+
+app.post('/admin-panel/update-user/:userId', async (req, res) => {
+    const userId = req.params.userId;
+    const updatedUsername = req.body.username;
+    const newPassword = req.body.password;
+
+    try {
+        // Find the user by ID
+        const user = await collection.UserModel.findById(userId);
+
+        if (!user) {
+            return res.status(404).send('User not found.');
+        }
+
+        // Update the user's information
+        user.name = updatedUsername;
+
+        // Save the updated user to the database
+        await user.save();
+
+        res.redirect('/admin-panel'); // Redirect back to the admin panel after updating
+    } catch (error) {
+        console.error('Error updating user:', error);
+        res.status(500).send('An error occurred while updating the user.');
+    }
+});
+
 
 app.listen(port, () => {
     console.log(`Server listening at http://localhost:${port}`);
